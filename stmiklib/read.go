@@ -82,6 +82,9 @@ func ReadAddress(unit map[string]interface{}) string {
 	return unit["address"].(string)
 }
 
+// ReadMetrics returns physical values measured at automation unit.
+// See SIGNAL[0:36] for those values
+
 /*
 		unit_attr["address"][i] = unit["address"].(string)
 
