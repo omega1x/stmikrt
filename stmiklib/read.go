@@ -3,6 +3,7 @@ package stmiklib
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 )
@@ -193,5 +194,40 @@ func ReadStatus(unit map[string]interface{}) (status [64]uint8, err error) {
 		int64(register[0]), int64(register[1]),
 		int64(register[2]), int64(register[3]),
 	)
+	return
+}
+
+// Scale100 The function converts real into integers saving values up to
+// the second decimal place. The function is used to compact sensor
+// readings for less bit usage when stored in databases.
+func Scale100(x float64) int32 {
+	return int32(math.Round(x * 100))
+}
+
+// ReadMetrics all measured sensor data and equipment state registries
+// compressed as integer values (SIGNAL_NAME[0:36])
+func ReadMetrics(unit map[string]interface{}) (metrics [37]int32) {
+	readings := ReadReadings(unit)
+	n := len(readings)
+	k := 0
+	for i, v := range readings {
+		metrics[k*n+i] = Scale100(v)
+	}
+	uppers := ReadUpLims(unit)
+	k++
+	for i, v := range uppers {
+		metrics[k*n+i] = Scale100(v)
+	}
+	lowers := ReadLowLims(unit)
+	k++
+	for i, v := range lowers {
+		metrics[k*n+i] = Scale100(v)
+	}
+	k++
+	registers := ReadRegisters(unit)
+	for i, v := range registers {
+		metrics[k*n+i] = v
+	}
+
 	return
 }

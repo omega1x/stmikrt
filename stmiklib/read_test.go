@@ -201,3 +201,43 @@ func TestReadAlarms(t *testing.T) {
 		t.Error(`[ReadAlarms] produces wrong result for zeroth unit in *stmik-message-ex.json*`)
 	}
 }
+
+func TestScale100(t *testing.T) {
+	inputs := [5]float64{10.4999, 10.5000, 10.9999, 11.0001, 11.0099}
+	refreads := [5]int32{1050, 1050, 1100, 1100, 1101}
+
+	var outputs [5]int32
+
+	for i, inp := range inputs {
+		outputs[i] = Scale100(inp)
+	}
+
+	if outputs != refreads {
+		t.Error(`[Scale100] produces wrong results`)
+	}
+}
+
+func TestReadMetrics(t *testing.T) {
+	unit, err := skimex()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	refreads := [37]int32{
+		// readings
+		3100, 5600, 6200, 2600, 7000, 350, 310, 630, 310, 300, 670,
+
+		// upper limits
+		9000, 9000, 8000, 11000, 12000, 700, 660, 650, 1050, 870, 1200,
+
+		//lower limits
+		3500, 3000, 5000, 5000, 5500, 50, 450, 600, 730, 200, 470,
+
+		//raw registers
+		0, 32832, 32768, 6175,
+	}
+
+	if ReadMetrics(unit[0]) != refreads {
+		t.Error(`[ReadMetrics] produces wrong results for zeroth unit in *stmik-message-ex.json*`)
+	}
+}
