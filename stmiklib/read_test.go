@@ -37,7 +37,7 @@ func TestTsparse(t *testing.T) {
 	}
 }
 
-//skimex smplifies applaying Skim function to *stmiklib/stmik-message-ex.json*
+//skimex simplifies applaying Skim function to *stmiklib/stmik-message-ex.json*
 func skimex() (unit []map[string]interface{}, err error) {
 	jsonFile, err := os.Open(STMIK_MESSAGE_FILE_NAME)
 	if err != nil {
@@ -240,4 +240,29 @@ func TestReadMetrics(t *testing.T) {
 	if ReadMetrics(unit[0]) != refreads {
 		t.Error(`[ReadMetrics] produces wrong results for zeroth unit in *stmik-message-ex.json*`)
 	}
+}
+
+func TestReadState(t *testing.T) {
+	unit, err := skimex()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	/*
+		refreads := [86]uint8{
+			// enables:
+			1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1,
+			// alarms:
+			1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1,
+			//status:
+			TODO: calculate status from actual registries
+
+		}
+		println(refreads)
+	*/
+	state, err := ReadState(unit[0])
+	if len(state) != 86 {
+		t.Error(`[ReadState] produces wrong results for zeroth unit in *stmik-message-ex.json*`)
+	}
+
 }

@@ -10,19 +10,19 @@ import (
 )
 
 const (
-	LINFO = "[INFO]"
-	LWARN = "[WARN]"
+	LOGINFO = "[INFO]"
+	LOGWARN = "[WARN]"
 )
 
 func main() {
-	log.Println(LINFO, "Start the service")
+	log.Println(LOGINFO, "Start the service")
 	message, err := stmiklib.Get("acservice01.p12", "iOEWS3DTue")
 
 	if err != nil {
-		log.Println(LWARN, "Fail perform GET-method on STMIK-server. Exit code")
+		log.Println(LOGWARN, "Fail perform GET-method on STMIK-server. Exit code")
 
 	} else {
-		log.Println(LINFO, "Response message of", len(message), "byte(s) is successfully received from STMIK-server")
+		log.Println(LOGINFO, "Response message of", len(message), "byte(s) is successfully received from STMIK-server")
 
 		/*
 			f, err := os.Create("stmik.json")
@@ -33,18 +33,21 @@ func main() {
 		*/
 
 		//os.WriteFile("~temp.json", message, 0644)
-		log.Println(LINFO, "Start parsing")
+		log.Println(LOGINFO, "Start parsing")
 		unit, err := stmiklib.Skim(message)
 		if err != nil {
-			log.Println(LWARN, "Fail parse response message. Exit code")
+			log.Println(LOGWARN, "Fail parse response message. Exit code")
 			// return exit code
 		}
-		log.Println(LINFO, "Data for", len(unit), "automation units are found in response message")
-		log.Println(LINFO, "Finish parse response message")
+		log.Println(LOGINFO, "Data for", len(unit), "automation units are found in response message")
+		log.Println(LOGINFO, "Finish parse response message")
 
-		log.Println(LINFO, "Start writing to Click-House Store")
+		state, err := stmiklib.ReadState(unit[0])
+		println(len(state))
+
+		log.Println(LOGINFO, "Start writing to Click-House Store")
 		ch()
-		log.Println(LINFO, "Finish the service. Exit code")
+		log.Println(LOGINFO, "Finish the service. Exit code")
 	}
 
 }

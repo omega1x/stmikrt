@@ -204,30 +204,51 @@ func Scale100(x float64) int32 {
 	return int32(math.Round(x * 100))
 }
 
-// ReadMetrics all measured sensor data and equipment state registries
+// ReadMetrics returns all measured sensor data and equipment state registries
 // compressed as integer values (SIGNAL_NAME[0:36])
 func ReadMetrics(unit map[string]interface{}) (metrics [37]int32) {
 	readings := ReadReadings(unit)
 	n := len(readings)
 	k := 0
 	for i, v := range readings {
-		metrics[k*n+i] = Scale100(v)
+		metrics[n*k+i] = Scale100(v)
 	}
 	uppers := ReadUpLims(unit)
 	k++
 	for i, v := range uppers {
-		metrics[k*n+i] = Scale100(v)
+		metrics[n*k+i] = Scale100(v)
 	}
 	lowers := ReadLowLims(unit)
 	k++
 	for i, v := range lowers {
-		metrics[k*n+i] = Scale100(v)
+		metrics[n*k+i] = Scale100(v)
 	}
 	k++
 	registers := ReadRegisters(unit)
 	for i, v := range registers {
-		metrics[k*n+i] = v
+		metrics[n*k+i] = v
 	}
 
+	return
+}
+
+// ReadState returns all information about sensor and equipment status (SIGNAL[37:101])
+func ReadState(unit map[string]interface{}) (state [86]uint8, err error) {
+	enables := ReadEnables(unit)
+	alarms := ReadAlarms(unit)
+	status, err := ReadStatus(unit)
+	n := len(enables)
+	k := 0
+	for i, v := range enables {
+		state[n*k+i] = v
+	}
+	k++
+	for i, v := range alarms {
+		state[n*k+i] = v
+	}
+	k++
+	for i, v := range status {
+		state[n*k+i] = v
+	}
 	return
 }
