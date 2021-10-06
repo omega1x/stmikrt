@@ -24,25 +24,16 @@ func main() {
 	} else {
 		log.Println(LOGINFO, "Response message of", len(message), "byte(s) is successfully received from STMIK-server")
 
-		/*
-			f, err := os.Create("stmik.json")
-			println(err)
-			w := bufio.NewWriter(f)
-			_, err = w.WriteString(string(message))
-			w.Flush()
-		*/
-
-		//os.WriteFile("~temp.json", message, 0644)
-		log.Println(LOGINFO, "Start parsing")
+		log.Println(LOGINFO, "Start skimming response message")
 		unit, err := stmiklib.Skim(message)
 		if err != nil {
-			log.Println(LOGWARN, "Fail parse response message. Exit code")
+			log.Println(LOGWARN, "Fail skimming response message. Exit code")
 			// return exit code
 		}
 		log.Println(LOGINFO, "Data for", len(unit), "automation units are found in response message")
-		log.Println(LOGINFO, "Finish parse response message")
+		log.Println(LOGINFO, "Finish skimming response message")
 
-		state, err := stmiklib.ReadState(unit[0])
+		state, _ := stmiklib.ReadState(unit[0])
 		println(len(state))
 
 		log.Println(LOGINFO, "Start writing to Click-House Store")
@@ -61,16 +52,8 @@ func ch() {
 		log.Fatal(err)
 	}
 
-	_, err = connect.Exec(`
-		CREATE TABLE IF NOT EXISTS example (
-			country_code FixedString(2),
-			os_id        UInt8,
-			browser_id   UInt8,
-			categories   Array(Int16),
-			action_day   Date,
-			action_time  DateTime
-		) engine=Memory
-	`)
+	log.Println(stmiklib.CreateQ2("stmik_messenger"))
+	_, err = connect.Exec(stmiklib.CreateQ())
 
 	if err != nil {
 		log.Fatal(err)
@@ -80,17 +63,7 @@ func ch() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	stmt, err := tx.Prepare(`
-		INSERT INTO example (
-			country_code,
-			os_id,
-			browser_id,
-			categories,
-			action_day,
-			action_time
-		) VALUES (
-			?, ?, ?, ?, ?, ?
-		)`)
+	stmt, err := tx.Prepare(stmiklib.InsertQ())
 
 	if err != nil {
 		log.Fatal(err)

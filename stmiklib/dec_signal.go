@@ -1,8 +1,8 @@
 package stmiklib
 
 var (
-	SIGNAL_NAME = [102]string{
-		// float64 -> int32
+	SIGNAL_NAME = [123]string{
+		// float64 -> int32; Total: 37
 		"titreading00heatt2", // Temperature of return heating water, [°C]
 		"titreading01netwt2", // Temperature of return network water, [°C]
 		"titreading02hotwt1", // Temperature of hot water, [°C]
@@ -42,10 +42,10 @@ var (
 		"tsregister00ts0015", // Zeroth register of TS array
 		"tsregister01ts1631", // First register of TS array
 		"tsregister02ts3247", // Second register of TS array
-		"tsregister03ts4863", // Third register of TS array
+		"tsregister03ts4863", // 37. Third register of TS array
 
 		// bool -> uint8
-		"titenabled00heatt2", // Enable of temperature of return heating water
+		"titenabled00heatt2", // 38. Enable of temperature of return heating water
 		"titenabled01netwt2", // Enable of temperature of return network water
 		"titenabled02hotwt1", // Enable of temperature of hot water
 		"titenabled03heatt1", // Enable of temperature of supply heating water
@@ -116,9 +116,31 @@ var (
 		"tsbit40failrdtit08", // Fail reading of TIT09 sensor
 		"tsbit41failrdtit09", // Fail reading of TIT10 sensor
 		"tsbit42failrdtit10", // Fail reading of TIT11 sensor
+
+		"tsbit43", // not in use
+		"tsbit44", // not in use
+		"tsbit45", // not in use
+		"tsbit46", // not in use
+		"tsbit47", // not in use
+		"tsbit48", // not in use
+		"tsbit49", // not in use
+		"tsbit50", // not in use
+		"tsbit51", // not in use
+		"tsbit52", // not in use
+		"tsbit53", // not in use
+		"tsbit54", // not in use
+		"tsbit55", // not in use
+		"tsbit56", // not in use
+		"tsbit57", // not in use
+		"tsbit58", // not in use
+		"tsbit59", // not in use
+		"tsbit60", // not in use
+		"tsbit61", // not in use
+		"tsbit62", // not in use
+		"tsbit63", // not in use
 	}
 
-	SIGNAL_DESCRIPTION = [102]string{
+	SIGNAL_DESCRIPTION = [123]string{
 		"Temperature of return heating water", // titreading00heatt2
 		"Temperature of return network water", // titreading01netwt2
 		"Temperature of hot water",            // titreading02hotwt1
@@ -230,5 +252,65 @@ var (
 		"Fail reading of TIT09 sensor", // tsbit40failrdtit08
 		"Fail reading of TIT10 sensor", // tsbit41failrdtit09
 		"Fail reading of TIT11 sensor", // tsbit42failrdtit10
+
+		"", // tsbit43
+		"", // tsbit44
+		"", // tsbit45
+		"", // tsbit46
+		"", // tsbit47
+		"", // tsbit48
+		"", // tsbit49
+		"", // tsbit50
+		"", // tsbit51
+		"", // tsbit52
+		"", // tsbit53
+		"", // tsbit54
+		"", // tsbit55
+		"", // tsbit56
+		"", // tsbit57
+		"", // tsbit58
+		"", // tsbit59
+		"", // tsbit60
+		"", // tsbit61
+		"", // tsbit62
+		"", // tsbit63
+	}
+
+	SIGNAL_UNIT = [123]string{
+		"°C",
+		"°C",
+		"°C",
+		"°C",
+		"°C",
+		"kg×f/cm²",
+		"kg×f/cm²",
+		"kg×f/cm²",
+		"kg×f/cm²",
+		"kg×f/cm²",
+		"kg×f/cm²",
+
+		"°C",
+		"°C",
+		"°C",
+		"°C",
+		"°C",
+		"kg×f/cm²",
+		"kg×f/cm²",
+		"kg×f/cm²",
+		"kg×f/cm²",
+		"kg×f/cm²",
+		"kg×f/cm²",
+
+		"°C",
+		"°C",
+		"°C",
+		"°C",
+		"°C",
+		"kg×f/cm²",
+		"kg×f/cm²",
+		"kg×f/cm²",
+		"kg×f/cm²",
+		"kg×f/cm²",
+		"kg×f/cm²",
 	}
 )

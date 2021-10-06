@@ -248,21 +248,49 @@ func TestReadState(t *testing.T) {
 		fmt.Println(err)
 	}
 
-	/*
-		refreads := [86]uint8{
-			// enables:
-			1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1,
-			// alarms:
-			1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1,
-			//status:
-			TODO: calculate status from actual registries
+	refreads := [86]uint8{
+		// enables:
+		1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1,
+		// alarms:
+		1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1,
+		// status:
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0,
+	}
 
-		}
-		println(refreads)
-	*/
 	state, err := ReadState(unit[0])
-	if len(state) != 86 {
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	if state != refreads {
 		t.Error(`[ReadState] produces wrong results for zeroth unit in *stmik-message-ex.json*`)
 	}
 
+}
+
+func TestSignalNames(t *testing.T) {
+	unit, err := skimex()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	metrics := ReadMetrics(unit[0])
+	state, err := ReadState(unit[0])
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	if len(SIGNAL_NAME) != (len(state) + len(metrics)) {
+		t.Error(`SIGNAL_NAMES may be inconsistent`)
+	}
+
+	if len(SIGNAL_DESCRIPTION) != len(SIGNAL_NAME) {
+		t.Error(`SIGNAL_DESCRIPTION may be inconsistent`)
+	}
+
+	if len(SIGNAL_UNIT) != len(SIGNAL_NAME) {
+		t.Error(`SIGNAL_UNIT may be inconsistent`)
+	}
 }
